@@ -29,6 +29,17 @@ class _TextScreenState extends State<TextScreen> {
   }
 
   void editNote(int index) {
+    if (titleController.text.isNotEmpty &&
+        descriptionController.text.isNotEmpty) {
+      setState(() {
+        notes.add(Note(
+          title: titleController.text,
+          description: descriptionController.text,
+        ));
+        titleController.clear();
+        descriptionController.clear();
+      });
+    }
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -55,11 +66,16 @@ class _TextScreenState extends State<TextScreen> {
                   hintText: 'Add description',
                 ),
               ),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text('Edit Done'),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.redAccent),
+                  child: const Text('Edit Done'),
+                ),
               ),
             ],
           ),
@@ -78,30 +94,41 @@ class _TextScreenState extends State<TextScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Flutter Note App'),
+        backgroundColor: Colors.white,
+        actions: const [
+          Icon(
+            Icons.search,
+            color: Colors.blue,
+          )
+        ],
       ),
       body: Column(
         children: [
           Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: TextField(
+            padding: const EdgeInsets.all(8.0),
+            child: TextFormField(
               controller: titleController,
               decoration: const InputDecoration(
                 hintText: 'Add title',
+                enabledBorder: OutlineInputBorder(),
+                focusedBorder: OutlineInputBorder(),
               ),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: TextField(
+            padding: const EdgeInsets.all(8.0),
+            child: TextFormField(
               controller: descriptionController,
               decoration: const InputDecoration(
                 hintText: 'Add description',
+                enabledBorder: OutlineInputBorder(),
+                focusedBorder: OutlineInputBorder(),
               ),
             ),
           ),
           ElevatedButton(
             onPressed: addNote,
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
             child: const Text('Add'),
           ),
           Expanded(
@@ -118,7 +145,7 @@ class _TextScreenState extends State<TextScreen> {
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: const Text('Options'),
+                            title: const Text('Alert'),
                             actions: [
                               TextButton(
                                 onPressed: () {
